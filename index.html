@@ -585,7 +585,7 @@
 
         <div class="control-group">
           <label for="custom-prompt">إضافات مخصصة (اختياري)</label>
-          <textarea class="control" id="custom-prompt" placeholder="مثال: remove clutter, warm lighting, elegant furniture..."></textarea>
+          <textarea class="control" id="custom-prompt" placeholder="مثال: add plants, wooden floor, soft curtains..."></textarea>
         </div>
 
         <button class="generate-btn" id="generate-btn" disabled>
@@ -681,6 +681,27 @@
       { id: 'farmhouse', ar: 'ريفي', bg: 'linear-gradient(135deg,#f0e8d4 0%,#b89670 50%,#5a4528 100%)' },
       { id: 'tropical', ar: 'استوائي', bg: 'linear-gradient(135deg,#a8c878 0%,#4a8a4a 50%,#1a3a28 100%)' }
     ];
+
+    const ROOM_PROMPTS = {
+      modern:      'Transform this room into a sleek modern style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change the furniture, decor, and color palette to modern: clean lines, neutral tones, minimal clutter, warm ambient lighting.',
+      minimal:     'Transform this room into a minimalist style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to minimalist: very few items, white and off-white palette, functional pieces only, no ornaments.',
+      scandinavian:'Transform this room into Scandinavian style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to Scandinavian: light wood tones, white walls, cozy textiles, simple shapes, hygge atmosphere.',
+      industrial:  'Transform this room into an industrial style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to industrial: exposed brick or concrete look, metal accents, dark tones, Edison bulbs, raw textures.',
+      luxury:      'Transform this room into a luxury style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to luxury: rich fabrics, gold accents, marble surfaces, dramatic lighting, opulent details.',
+      bohemian:    'Transform this room into a bohemian style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to bohemian: layered textiles, warm earthy tones, plants, eclectic patterns, vintage pieces.',
+      japandi:     'Transform this room into a Japandi style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to Japandi: Japanese-Scandinavian fusion, natural wood, neutral palette, wabi-sabi aesthetics, zen simplicity.',
+      midcentury:  'Transform this room into mid-century modern style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to mid-century modern: tapered legs, organic shapes, warm wood, mustard and teal accents.',
+      coastal:     'Transform this room into a coastal style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to coastal: light blues, sandy whites, natural linen, rattan accents, breezy and fresh atmosphere.',
+      moroccan:    'Transform this room into a Moroccan style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to Moroccan: rich jewel tones, intricate patterns, lanterns, ornate tiles, warm spice colors.',
+      farmhouse:   'Transform this room into a farmhouse style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to farmhouse: shiplap walls, rustic wood, neutral linens, vintage accents, warm and homey feel.',
+      tropical:    'Transform this room into a tropical style. Keep the exact same room layout, walls, windows, doors, and floor structure. Only change furniture and decor to tropical: lush green plants, rattan furniture, light airy fabrics, natural materials, vibrant botanical accents.'
+    };
+
+    const ROOM_LABELS = {
+      living: 'living room', bedroom: 'bedroom', kitchen: 'kitchen',
+      dining: 'dining room', majlis: 'majlis', office: 'home office',
+      bathroom: 'bathroom', kids: 'kids room', outdoor: 'outdoor patio'
+    };
 
     const state = {
       uploadedImage: null,
@@ -864,20 +885,14 @@
       }
     }
 
+    // ✅ التعديل الرئيسي — prompt يُشير للصورة المدخلة ويحافظ على تخطيط الغرفة
     function buildPrompt() {
-      const roomMap = {
-        living: 'living room',
-        bedroom: 'bedroom',
-        kitchen: 'kitchen',
-        dining: 'dining room',
-        majlis: 'majlis',
-        office: 'home office',
-        bathroom: 'bathroom',
-        kids: 'kids room',
-        outdoor: 'outdoor patio'
-      };
+      const roomLabel = ROOM_LABELS[state.roomType] || 'room';
+      const basePrompt = ROOM_PROMPTS[state.selectedStyle] || ROOM_PROMPTS.modern;
+      const roomContext = `This is a ${roomLabel}.`;
+      const extra = state.customPrompt.trim() ? `Additional details: ${state.customPrompt.trim()}.` : '';
 
-      return `${state.selectedStyle} ${roomMap[state.roomType] || 'room'} interior design, clean room, remove clutter, realistic, elegant furniture, warm lighting, same room layout, ${state.customPrompt}`.trim();
+      return [roomContext, basePrompt, extra].filter(Boolean).join(' ');
     }
 
     function fillAnalysis(styleLabel) {
