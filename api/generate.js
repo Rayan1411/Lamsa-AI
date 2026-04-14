@@ -18,7 +18,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Image is required" });
     }
 
-    const guidanceScale = Math.max(1, Math.min(20, Number(intensity) * 5 + 1));
+    // intensity: 0.3 → 3.5 (محافظ) | 1.0 → 7.0 (جريء)
+    const guidanceScale = 3.5 + (Number(intensity) - 0.3) * (3.5 / 0.7);
 
     const createResponse = await fetch("https://api.novita.ai/v3/async/flux-1-kontext-pro", {
       method: "POST",
