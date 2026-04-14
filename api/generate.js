@@ -8,73 +8,110 @@ export default async function handler(req, res) {
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "NOVITA_API_KEY missing"
+        error: "NOVITA_API_KEY missing in Vercel environment variables"
       });
     }
 
-    const { image, prompt } = req.body;
+    const { image, prompt = "", intensity = 0.75 } = req.body || {};
 
-    // 1️⃣ إنشاء المهمة
-    const createTask = await fetch("https://api.novita.ai/v3/async/flux-kontext-pro", {
+    if (!image) {
+      return res.status(400).json({ error: "Image is required" });
+    }
+
+    const guidanceScale = Math.max(1, Math.min(20, Number(intensity) * 5 + 1));
+
+    const createResponse = await fetch("https://api.novita.ai/v3/async/flux-1-kontext-pro", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        prompt: prompt || "modern luxury interior design, realistic, same room layout",
+        prompt,
         images: [image],
-        guidance_scale: 3.5,
-        aspect_ratio: "1:1"
+        guidance_scale: guidanceScale,
+        aspect_ratio: "1:1",
+        seed: -1
       })
     });
 
-    const taskData = await createTask.json();
+    const createData = await createResponse.json();
 
-    if (!createTask.ok) {
+    if (!createResponse.ok) {
       return res.status(500).json({
         error: "Failed to create task",
-        details: taskData
+        details: createData
       });
     }
 
-    const taskId = taskData.task_id;
-
-    // 2️⃣ انتظار النتيجة
-    let result = null;
-    let attempts = 0;
-
-    while (attempts < 20) {
-      await new Promise(r => setTimeout(r, 2000));
-      attempts++;
-
-      const check = await fetch(`https://api.novita.ai/v3/async/task-result?task_id=${taskId}`, {
-        headers: {
-          "Authorization": `Bearer ${apiKey}`
-        }
+    if (!createData.task_id) {
+      return res.status(500).json({
+        error: "No task_id returned from Novita",
+        details: createData
       });
+    }
 
-      const data = await check.json();
+    let result = null;
+    const maxAttempts = 30;
 
-      if (data.status === "succeeded") {
-        result = data;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      const pollResponse = await fetch(
+        `https://api.novita.ai/v3/async/task-result?task_id=${encodeURIComponent(createData.task_id)}`,
+        {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      const pollData = await pollResponse.json();
+
+      if (!pollResponse.ok) {
+        return res.status(500).json({
+          error: "Failed to get task result",
+          details: pollData
+        });
+      }
+
+      const status = pollData?.task?.status;
+
+      if (status === "TASK_STATUS_SUCCEED") {
+        result = pollData;
         break;
+      }
+
+      if (status === "TASK_STATUS_FAILED") {
+        return res.status(500).json({
+          error: pollData?.task?.reason || "Task failed",
+          details: pollData
+        });
       }
     }
 
     if (!result) {
       return res.status(500).json({
-        error: "Timeout or failed"
+        error: "Task timed out"
       });
     }
 
-    return res.status(200).json({
-      output: result.images?.[0]?.url
-    });
+    const output = result?.images?.[0]?.image_url;
 
-  } catch (err) {
+    if (!output) {
+      return res.status(500).json({
+        error: "No image returned from Novita",
+        details: result
+      });
+    }
+
+    return res.status(200).json({ output });
+
+  } catch (error) {
     return res.status(500).json({
-      error: err.message
+      error: error.message || "Unknown server error"
     });
   }
 }
