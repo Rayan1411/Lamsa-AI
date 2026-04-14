@@ -4,74 +4,77 @@ export default async function handler(req, res) {
   }
 
   try {
-    const apiKey = process.env.REPLICATE_API_KEY;
+    const apiKey = process.env.NOVITA_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "REPLICATE_API_KEY is missing in Vercel environment variables"
+        error: "NOVITA_API_KEY missing"
       });
     }
 
-    const { image, prompt = "", style = "modern", roomType = "living" } = req.body || {};
+    const { image, prompt } = req.body;
 
-    if (!image) {
-      return res.status(400).json({ error: "Image is required" });
-    }
-
-    const createResponse = await fetch("https://api.replicate.com/v1/predictions", {
+    // 1️⃣ إنشاء المهمة
+    const createTask = await fetch("https://api.novita.ai/v3/async/flux-kontext-pro", {
       method: "POST",
       headers: {
-        "Authorization": `Token ${apiKey}`,
+        "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        version: "76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38",
-        input: {
-          image,
-          prompt: `${style} ${roomType} interior design, ${prompt}, same room layout, realistic, high quality`
-        }
+        prompt: prompt || "modern luxury interior design, realistic, same room layout",
+        images: [image],
+        guidance_scale: 3.5,
+        aspect_ratio: "1:1"
       })
     });
 
-    const createData = await createResponse.json();
+    const taskData = await createTask.json();
 
-    if (!createResponse.ok) {
+    if (!createTask.ok) {
       return res.status(500).json({
-        error: "Failed to create Replicate prediction",
-        details: createData
+        error: "Failed to create task",
+        details: taskData
       });
     }
 
-    let result = createData;
-    let attempts = 0;
-    const maxAttempts = 30;
+    const taskId = taskData.task_id;
 
-    while (result.status !== "succeeded" && result.status !== "failed" && attempts < maxAttempts) {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+    // 2️⃣ انتظار النتيجة
+    let result = null;
+    let attempts = 0;
+
+    while (attempts < 20) {
+      await new Promise(r => setTimeout(r, 2000));
       attempts++;
 
-      const pollResponse = await fetch(result.urls.get, {
+      const check = await fetch(`https://api.novita.ai/v3/async/task-result?task_id=${taskId}`, {
         headers: {
-          "Authorization": `Token ${apiKey}`
+          "Authorization": `Bearer ${apiKey}`
         }
       });
 
-      result = await pollResponse.json();
+      const data = await check.json();
+
+      if (data.status === "succeeded") {
+        result = data;
+        break;
+      }
     }
 
-    if (result.status === "succeeded") {
-      const output = Array.isArray(result.output) ? result.output[0] : result.output;
-      return res.status(200).json({ output });
+    if (!result) {
+      return res.status(500).json({
+        error: "Timeout or failed"
+      });
     }
 
-    return res.status(500).json({
-      error: "Generation failed or timed out",
-      details: result
+    return res.status(200).json({
+      output: result.images?.[0]?.url
     });
 
-  } catch (error) {
+  } catch (err) {
     return res.status(500).json({
-      error: error.message || "Unknown server error"
+      error: err.message
     });
   }
 }
