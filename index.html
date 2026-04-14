@@ -1,0 +1,2048 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAMSA AI · AI Interior Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=Manrope:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf6ec;
+  --bg-2: #f2ecd9;
+  --bg-3: #e8dfc4;
+  --card: #ffffff;
+  --ink: #1a1510;
+  --ink-soft: #4a3f33;
+  --ink-mute: #8a7e6a;
+  --line: #e4dcc2;
+  --line-soft: #ede6d0;
+  --primary: #1d2a20;
+  --primary-2: #2d3f2e;
+  --accent: #b85c2c;
+  --accent-2: #d67a45;
+  --accent-tint: #f8e8d8;
+  --gold: #a88030;
+  --success: #3d7a4e;
+  --shadow-sm: 0 1px 2px rgba(26,21,16,0.04);
+  --shadow-md: 0 4px 16px rgba(26,21,16,0.07), 0 2px 6px rgba(26,21,16,0.04);
+  --shadow-lg: 0 24px 56px -16px rgba(26,21,16,0.16), 0 12px 24px -12px rgba(26,21,16,0.08);
+  --shadow-accent: 0 12px 32px -8px rgba(184,92,44,0.35);
+  --radius: 10px;
+  --radius-lg: 18px;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Manrope", -apple-system, sans-serif;
+  --font-ar: "Tajawal", system-ui, sans-serif;
+  --font-ar-display: "Amiri", "Tajawal", serif;
+}
+
+[data-theme="dark"] {
+  --bg: #12100a;
+  --bg-2: #1a1710;
+  --bg-3: #242018;
+  --card: #1a1710;
+  --ink: #f4ecd8;
+  --ink-soft: #c9bfa4;
+  --ink-mute: #7a6f58;
+  --line: #2d2818;
+  --line-soft: #221e12;
+  --primary: #e4d9b8;
+  --primary-2: #cfc29a;
+  --accent: #d67a45;
+  --accent-tint: #2a1d12;
+  --shadow-lg: 0 24px 56px -16px rgba(0,0,0,0.6);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(184,92,44,0.08), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(29,42,32,0.06), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="dark"] body::before {
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(214,122,69,0.12), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(228,217,184,0.04), transparent 60%);
+}
+
+[dir="rtl"] body { font-family: var(--font-ar); }
+[dir="rtl"] .display { font-family: var(--font-ar-display); }
+
+.display {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  letter-spacing: -0.025em;
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  color: inherit;
+}
+button { cursor: pointer; border: none; background: none; }
+a { color: inherit; text-decoration: none; }
+
+/* ═══════════════════ HEADER ═══════════════════ */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(250, 246, 236, 0.82);
+  border-bottom: 1px solid var(--line-soft);
+}
+[data-theme="dark"] .header { background: rgba(18, 16, 10, 0.82); }
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 18px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+  display: grid;
+  place-items: center;
+  color: var(--bg);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px -6px rgba(29,42,32,0.4);
+}
+.brand-mark svg { width: 24px; height: 24px; position: relative; z-index: 2; }
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.25), transparent 55%);
+}
+
+.brand-text { display: flex; flex-direction: column; line-height: 1; }
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+[dir="rtl"] .brand-name { font-family: var(--font-ar-display); font-size: 28px; }
+.brand-tag {
+  font-size: 10px;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-top: 4px;
+  font-weight: 500;
+}
+[dir="rtl"] .brand-tag { letter-spacing: 0.05em; font-size: 11px; }
+
+.header-nav { display: flex; align-items: center; gap: 6px; }
+.nav-link {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.nav-link:hover { color: var(--ink); background: var(--bg-2); }
+.nav-link.active { color: var(--accent); }
+
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.icon-btn:hover { background: var(--bg-2); color: var(--ink); border-color: var(--line); }
+.icon-btn svg { width: 18px; height: 18px; }
+
+.lang-toggle {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.lang-toggle:hover { color: var(--ink); background: var(--bg-2); }
+
+/* ═══════════════════ HERO ═══════════════════ */
+.hero {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 72px 36px 48px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: var(--accent-tint);
+  color: var(--accent);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+[dir="rtl"] .hero-eyebrow { letter-spacing: 0; font-size: 13px; text-transform: none; }
+.hero-eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(184,92,44,0.2);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(184,92,44,0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(184,92,44,0.05); }
+}
+
+.hero-title {
+  font-size: clamp(44px, 6vw, 76px);
+  line-height: 0.95;
+  margin-bottom: 28px;
+  letter-spacing: -0.03em;
+}
+[dir="rtl"] .hero-title { font-size: clamp(40px, 5.5vw, 68px); line-height: 1.15; }
+.hero-title .italic {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+[dir="rtl"] .hero-title .italic { font-style: normal; color: var(--accent); font-weight: 700; }
+
+.hero-desc {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 520px;
+  margin-bottom: 36px;
+}
+[dir="rtl"] .hero-desc { font-size: 18px; line-height: 1.85; }
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.stat-item { display: flex; flex-direction: column; }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 8px;
+}
+[dir="rtl"] .stat-label { text-transform: none; letter-spacing: 0; font-size: 13px; }
+
+/* Hero showcase (before/after preview) */
+.hero-showcase {
+  position: relative;
+  aspect-ratio: 4/5;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  background: var(--bg-3);
+}
+.showcase-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.showcase-before {
+  background-image: linear-gradient(135deg, #8b7d6b 0%, #6b5d4b 50%, #4a3d2b 100%);
+}
+.showcase-before::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(255,220,150,0.3), transparent 40%),
+    linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.3) 100%);
+}
+.showcase-after {
+  clip-path: polygon(55% 0, 100% 0, 100% 100%, 45% 100%);
+  background: linear-gradient(135deg, #d4a574 0%, #a67c52 40%, #6b4423 100%);
+}
+.showcase-after::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(255,230,180,0.5), transparent 50%),
+    linear-gradient(135deg, transparent 60%, rgba(184,92,44,0.3) 100%);
+}
+.showcase-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 0 20px rgba(255,255,255,0.4);
+  z-index: 3;
+  transform: skewX(-8deg);
+}
+.showcase-label {
+  position: absolute;
+  top: 20px;
+  padding: 6px 14px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  z-index: 4;
+}
+.showcase-label.before { left: 20px; }
+.showcase-label.after { right: 20px; background: rgba(184,92,44,0.9); }
+[dir="rtl"] .showcase-label { font-size: 12px; letter-spacing: 0; text-transform: none; }
+
+/* ═══════════════════ STUDIO ═══════════════════ */
+.studio {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 48px 36px 96px;
+  position: relative;
+  z-index: 1;
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.section-title-wrap { max-width: 60%; }
+.section-num {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--accent);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+.section-title {
+  font-size: 36px;
+  letter-spacing: -0.025em;
+  margin-bottom: 8px;
+}
+[dir="rtl"] .section-title { font-size: 38px; }
+.section-desc {
+  font-size: 14px;
+  color: var(--ink-mute);
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+.studio-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 32px;
+}
+
+/* Upload Zone */
+.upload-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--line-soft);
+}
+
+.upload-zone {
+  position: relative;
+  aspect-ratio: 4/3;
+  border: 2px dashed var(--line);
+  border-radius: 14px;
+  background:
+    linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
+    repeating-linear-gradient(45deg, transparent 0 10px, rgba(184,92,44,0.03) 10px 20px);
+  display: grid;
+  place-items: center;
+  transition: all 0.3s;
+  cursor: pointer;
+  overflow: hidden;
+}
+.upload-zone:hover {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+}
+.upload-zone.has-image {
+  border-style: solid;
+  border-color: var(--line);
+  background: var(--ink);
+  cursor: default;
+}
+.upload-zone.dragging {
+  border-color: var(--accent);
+  background: var(--accent-tint);
+  transform: scale(0.99);
+}
+
+.upload-prompt {
+  text-align: center;
+  padding: 40px;
+  pointer-events: none;
+}
+.upload-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  background: var(--card);
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-md);
+  color: var(--accent);
+}
+.upload-icon svg { width: 28px; height: 28px; }
+.upload-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+[dir="rtl"] .upload-title { font-family: var(--font-ar-display); font-size: 26px; }
+.upload-sub {
+  font-size: 13px;
+  color: var(--ink-mute);
+  margin-bottom: 20px;
+}
+.upload-formats {
+  display: inline-flex;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--ink-mute);
+}
+.upload-formats span {
+  padding: 4px 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  font-weight: 600;
+}
+
+.uploaded-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.upload-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.6) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.upload-zone.has-image:hover .upload-overlay { opacity: 1; }
+.overlay-btn {
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.95);
+  color: var(--ink);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.overlay-btn.danger { background: rgba(184,58,58,0.95); color: #fff; }
+
+input[type="file"] { display: none; }
+
+.upload-tips {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--bg-2);
+  border-radius: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.tips-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--accent-tint);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+}
+.tips-icon svg { width: 16px; height: 16px; }
+.tips-text { font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+.tips-text strong { color: var(--ink); }
+
+/* Controls */
+.controls-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.control-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 12px;
+}
+[dir="rtl"] .control-group label { text-transform: none; letter-spacing: 0; font-size: 13px; }
+
+.select-wrap { position: relative; }
+.select-wrap::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--ink-mute);
+  border-bottom: 2px solid var(--ink-mute);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+[dir="rtl"] .select-wrap::after { right: auto; left: 16px; }
+select.control {
+  width: 100%;
+  padding: 14px 16px;
+  padding-right: 40px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+[dir="rtl"] select.control { padding-right: 16px; padding-left: 40px; }
+select.control:hover { border-color: var(--accent); }
+select.control:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.style-card {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: 2px solid var(--line);
+  background: var(--bg-2);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+}
+.style-card:hover { border-color: var(--ink-soft); transform: translateY(-2px); }
+.style-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint), var(--shadow-md);
+}
+.style-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--style-bg, linear-gradient(135deg, #ccc, #999));
+  opacity: 0.9;
+}
+.style-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.75) 100%);
+}
+.style-name {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+[dir="rtl"] .style-name { font-size: 13px; }
+
+/* Intensity slider */
+.intensity {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.intensity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.intensity-value {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--accent);
+  font-weight: 600;
+}
+input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 6px;
+  background: var(--bg-3);
+  border-radius: 100px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid var(--card);
+  box-shadow: 0 2px 8px rgba(184,92,44,0.4);
+  transition: transform 0.15s;
+}
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+input[type="range"]::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid var(--card);
+  box-shadow: 0 2px 8px rgba(184,92,44,0.4);
+}
+
+textarea.control {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  line-height: 1.6;
+}
+textarea.control:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+
+/* Generate button */
+.generate-btn {
+  width: 100%;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  color: #fff;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s;
+  box-shadow: var(--shadow-accent);
+  position: relative;
+  overflow: hidden;
+}
+.generate-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+.generate-btn:hover::before { transform: translateX(100%); }
+.generate-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -8px rgba(184,92,44,0.45); }
+.generate-btn:active { transform: translateY(0); }
+.generate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.generate-btn svg { width: 20px; height: 20px; }
+
+/* ═══════════════════ RESULT ═══════════════════ */
+.result-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 36px 96px;
+  display: none;
+}
+.result-section.visible { display: block; }
+
+.result-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--line-soft);
+}
+
+.result-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.result-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+[dir="rtl"] .result-title { font-family: var(--font-ar-display); font-size: 30px; }
+.result-badge {
+  padding: 4px 12px;
+  background: var(--accent-tint);
+  color: var(--accent);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+[dir="rtl"] .result-badge { text-transform: none; letter-spacing: 0; font-size: 12px; }
+
+.result-actions { display: flex; gap: 8px; }
+.result-btn {
+  padding: 10px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.result-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.result-btn svg { width: 14px; height: 14px; }
+
+/* Comparison slider */
+.compare-wrap {
+  position: relative;
+  aspect-ratio: 16/10;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  background: #111;
+  user-select: none;
+  margin-bottom: 24px;
+}
+.compare-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.compare-after-wrap {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 0 0 50%);
+}
+[dir="rtl"] .compare-after-wrap { clip-path: inset(0 50% 0 0); }
+.compare-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  background: #fff;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  cursor: ew-resize;
+  z-index: 3;
+}
+.compare-handle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.compare-handle::after {
+  content: "⟷";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 900;
+  z-index: 2;
+}
+.compare-tag {
+  position: absolute;
+  top: 16px;
+  padding: 6px 12px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 4;
+}
+[dir="rtl"] .compare-tag { font-size: 12px; letter-spacing: 0; text-transform: none; }
+.compare-tag.before { left: 16px; }
+.compare-tag.after { right: 16px; background: rgba(184,92,44,0.85); }
+
+/* AI Analysis Panel */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 24px;
+}
+.analysis-box {
+  padding: 20px;
+  background: var(--bg-2);
+  border-radius: 12px;
+  border: 1px solid var(--line-soft);
+}
+.analysis-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 10px;
+}
+[dir="rtl"] .analysis-label { text-transform: none; letter-spacing: 0; font-size: 13px; }
+.analysis-content {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+.palette {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.palette-chip {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--card);
+}
+
+/* Loading State */
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 21, 16, 0.85);
+  backdrop-filter: blur(12px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 10;
+  border-radius: 14px;
+}
+.loading-overlay.visible { display: flex; }
+.loader {
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text {
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 20px;
+  text-align: center;
+}
+[dir="rtl"] .loader-text { font-family: var(--font-ar-display); font-size: 24px; }
+.loader-sub {
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+}
+
+/* ═══════════════════ GALLERY ═══════════════════ */
+.gallery-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 36px 96px;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.gallery-empty {
+  grid-column: 1/-1;
+  padding: 60px 20px;
+  text-align: center;
+  background: var(--card);
+  border: 2px dashed var(--line);
+  border-radius: 14px;
+  color: var(--ink-mute);
+}
+.gallery-empty-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+[dir="rtl"] .gallery-empty-title { font-family: var(--font-ar-display); font-size: 26px; }
+.gallery-item {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-3);
+  position: relative;
+  cursor: pointer;
+  border: 1px solid var(--line-soft);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.gallery-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-meta {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 12px;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.85));
+  color: #fff;
+}
+.gallery-style {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.gallery-date {
+  font-size: 10px;
+  opacity: 0.75;
+}
+
+/* ═══════════════════ MODAL ═══════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 21, 16, 0.7);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+.modal-overlay.visible { display: flex; }
+.modal {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.modal-head {
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--line-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+}
+[dir="rtl"] .modal-title { font-family: var(--font-ar-display); font-size: 26px; }
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-mute);
+}
+.modal-close:hover { background: var(--bg-2); color: var(--ink); }
+.modal-body { padding: 28px; }
+.modal-body p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+.modal-body code {
+  display: block;
+  padding: 12px 16px;
+  background: var(--bg-2);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--accent);
+  margin: 8px 0;
+  font-family: "Courier New", monospace;
+  word-break: break-all;
+}
+.modal-body input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+.modal-body input:focus { outline: none; border-color: var(--accent); }
+.modal-footer {
+  padding: 20px 28px;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.btn-primary {
+  padding: 12px 22px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.btn-primary:hover { background: var(--accent-2); transform: translateY(-1px); }
+.btn-ghost {
+  padding: 12px 22px;
+  background: var(--bg-2);
+  color: var(--ink-soft);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.btn-ghost:hover { background: var(--bg-3); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--ink);
+  color: var(--bg);
+  padding: 14px 22px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  z-index: 200;
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.toast.visible { transform: translateX(-50%) translateY(0); }
+.toast.error { background: var(--danger); color: #fff; }
+
+/* Footer */
+.footer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 36px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--ink-mute);
+  font-size: 12px;
+}
+.footer-links { display: flex; gap: 20px; }
+.footer-links a:hover { color: var(--ink); }
+
+/* Responsive */
+@media (max-width: 960px) {
+  .hero-grid, .studio-grid, .analysis-grid { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .header-nav { display: none; }
+  .hero-title { font-size: 44px !important; }
+  .hero-stats { gap: 24px; }
+  .stat-num { font-size: 26px; }
+  .section-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .section-title-wrap { max-width: 100%; }
+  .header-inner, .hero, .studio, .result-section, .gallery-section, .footer { padding-left: 20px; padding-right: 20px; }
+}
+@media (max-width: 560px) {
+  .style-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-8h6v8"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-name" data-i18n="brand">LAMSA AI</div>
+        <div class="brand-tag" data-i18n="brand_tag">تصميم داخلي بالذكاء الاصطناعي</div>
+      </div>
+    </div>
+
+    <nav class="header-nav">
+      <a href="#studio" class="nav-link active" data-i18n="nav_studio">الاستوديو</a>
+      <a href="#gallery" class="nav-link" data-i18n="nav_gallery">الأعمال</a>
+      <a href="#" class="nav-link" data-i18n="nav_pricing">الأسعار</a>
+      <a href="#" class="nav-link" data-i18n="nav_help">المساعدة</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="theme-btn" title="Theme">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="icon-btn" id="settings-btn" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button class="lang-toggle" id="lang-btn">EN</button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow" data-i18n="hero_badge">مدعوم بالذكاء الاصطناعي</div>
+      <h1 class="display hero-title" data-i18n-html="hero_title">
+        حوّل غرفتك إلى <span class="italic">تحفة فنية</span> بلمسة واحدة
+      </h1>
+      <p class="hero-desc" data-i18n="hero_desc">
+        ارفع صورة غرفتك، اختر النمط الذي تحبه، ودع الذكاء الاصطناعي يعيد تصميمها بنتائج احترافية في ثوانٍ. لا حاجة لمصمم داخلي ولا ميزانية ضخمة.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">12+</div>
+          <div class="stat-label" data-i18n="stat_styles">نمط تصميم</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">&lt; 30s</div>
+          <div class="stat-label" data-i18n="stat_speed">زمن التوليد</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4K</div>
+          <div class="stat-label" data-i18n="stat_quality">جودة الإخراج</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-showcase">
+      <div class="showcase-img showcase-before"></div>
+      <div class="showcase-img showcase-after"></div>
+      <div class="showcase-divider"></div>
+      <div class="showcase-label before" data-i18n="label_before">قبل</div>
+      <div class="showcase-label after" data-i18n="label_after">بعد</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ STUDIO ═══════════════════ -->
+<section class="studio" id="studio">
+  <div class="section-head">
+    <div class="section-title-wrap">
+      <div class="section-num">— 01 / STUDIO</div>
+      <h2 class="display section-title" data-i18n="studio_title">استوديو التصميم</h2>
+      <p class="section-desc" data-i18n="studio_desc">ارفع صورة واضحة لغرفتك، اختر النمط، وخصّص التفاصيل لأفضل نتيجة ممكنة.</p>
+    </div>
+  </div>
+
+  <div class="studio-grid">
+    <!-- Upload side -->
+    <div class="upload-card">
+      <label class="upload-zone" id="upload-zone" for="file-input">
+        <input type="file" id="file-input" accept="image/*">
+        <div class="upload-prompt" id="upload-prompt">
+          <div class="upload-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="upload-title display" data-i18n="upload_title">اسحب صورة غرفتك هنا</div>
+          <div class="upload-sub" data-i18n="upload_sub">أو اضغط للاختيار من جهازك</div>
+          <div class="upload-formats">
+            <span>JPG</span><span>PNG</span><span>WEBP</span><span>max 10MB</span>
+          </div>
+        </div>
+        <img class="uploaded-img" id="uploaded-img" style="display:none" alt="">
+        <div class="upload-overlay">
+          <button class="overlay-btn" type="button" onclick="document.getElementById('file-input').click(); event.preventDefault();">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17v4h4m14-4v4h-4M3 7V3h4m14 4V3h-4M12 8v8m-4-4h8"/></svg>
+            <span data-i18n="btn_change">تغيير</span>
+          </button>
+          <button class="overlay-btn danger" type="button" onclick="clearImage(); event.preventDefault();">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+            <span data-i18n="btn_remove">حذف</span>
+          </button>
+        </div>
+      </label>
+
+      <div class="upload-tips">
+        <div class="tips-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        </div>
+        <div class="tips-text" data-i18n-html="tips_text">
+          <strong>نصيحة:</strong> التقط الصورة في وضح النهار من زاوية واسعة، وتأكد من ظهور الأرضية والجدران بوضوح. كلما كانت الصورة أوضح، كانت النتيجة أفضل.
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls side -->
+    <div class="controls-card">
+      <div class="control-group">
+        <label data-i18n="ctrl_room">نوع الغرفة</label>
+        <div class="select-wrap">
+          <select class="control" id="room-select">
+            <option value="living">Living Room / غرفة المعيشة</option>
+            <option value="bedroom">Bedroom / غرفة النوم</option>
+            <option value="kitchen">Kitchen / المطبخ</option>
+            <option value="dining">Dining Room / غرفة الطعام</option>
+            <option value="majlis">Majlis / مجلس</option>
+            <option value="office">Home Office / مكتب منزلي</option>
+            <option value="bathroom">Bathroom / حمام</option>
+            <option value="kids">Kids Room / غرفة أطفال</option>
+            <option value="outdoor">Outdoor / الحديقة</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label data-i18n="ctrl_style">نمط التصميم</label>
+        <div class="style-grid" id="style-grid"></div>
+      </div>
+
+      <div class="control-group">
+        <div class="intensity">
+          <div class="intensity-header">
+            <label style="margin:0" data-i18n="ctrl_intensity">قوة التحويل</label>
+            <div class="intensity-value" id="intensity-val">0.75</div>
+          </div>
+          <input type="range" id="intensity" min="0.3" max="1" step="0.05" value="0.75">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--ink-mute);">
+            <span data-i18n="intensity_low">محافظ</span>
+            <span data-i18n="intensity_high">جريء</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label data-i18n="ctrl_prompt">إضافات مخصصة (اختياري)</label>
+        <textarea class="control" id="custom-prompt" data-i18n-ph="prompt_placeholder" placeholder="مثال: أضف نباتات، إضاءة دافئة، ألوان ترابية..."></textarea>
+      </div>
+
+      <button class="generate-btn" id="generate-btn" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+        <span data-i18n="btn_generate">توليد التصميم</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ RESULT ═══════════════════ -->
+<section class="result-section" id="result-section">
+  <div class="result-card">
+    <div class="result-head">
+      <div>
+        <h2 class="result-title">
+          <span data-i18n="result_title">النتيجة</span>
+          <span class="result-badge" id="result-style-badge">Modern</span>
+        </h2>
+      </div>
+      <div class="result-actions">
+        <button class="result-btn" onclick="downloadResult()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          <span data-i18n="btn_download">تحميل</span>
+        </button>
+        <button class="result-btn" onclick="saveToGallery()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <span data-i18n="btn_save">حفظ</span>
+        </button>
+        <button class="result-btn" onclick="shareResult()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>
+          <span data-i18n="btn_share">مشاركة</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="compare-wrap" id="compare-wrap">
+      <img class="compare-img compare-before" id="compare-before" alt="">
+      <div class="compare-after-wrap" id="compare-after-wrap">
+        <img class="compare-img compare-after" id="compare-after" alt="">
+      </div>
+      <div class="compare-tag before" data-i18n="label_before">قبل</div>
+      <div class="compare-tag after" data-i18n="label_after">بعد</div>
+      <div class="compare-handle" id="compare-handle"></div>
+      <div class="loading-overlay" id="loading-overlay">
+        <div class="loader"></div>
+        <div class="loader-text" id="loader-text">جاري إعادة التصميم...</div>
+        <div class="loader-sub" data-i18n="loading_sub">عادةً ما يستغرق 15-30 ثانية</div>
+      </div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-box">
+        <div class="analysis-label" data-i18n="analysis_palette">لوحة الألوان</div>
+        <div class="palette" id="palette"></div>
+        <div class="analysis-content" id="palette-desc" style="margin-top:12px"></div>
+      </div>
+      <div class="analysis-box">
+        <div class="analysis-label" data-i18n="analysis_notes">ملاحظات المصمم</div>
+        <div class="analysis-content" id="design-notes"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ GALLERY ═══════════════════ -->
+<section class="gallery-section" id="gallery">
+  <div class="section-head">
+    <div class="section-title-wrap">
+      <div class="section-num">— 02 / ARCHIVE</div>
+      <h2 class="display section-title" data-i18n="gallery_title">أعمالك المحفوظة</h2>
+      <p class="section-desc" data-i18n="gallery_desc">كل التصاميم التي أنشأتها محفوظة هنا. اضغط على أي منها لإعادة عرضها.</p>
+    </div>
+  </div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="footer">
+  <div>© 2026 LAMSA AI — <span data-i18n="footer_tag">تصميم داخلي بالذكاء الاصطناعي</span></div>
+  <div class="footer-links">
+    <a href="#" data-i18n="footer_privacy">الخصوصية</a>
+    <a href="#" data-i18n="footer_terms">الشروط</a>
+    <a href="#" data-i18n="footer_contact">تواصل</a>
+  </div>
+</footer>
+
+<!-- ═══════════════════ SETTINGS MODAL ═══════════════════ -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title display" data-i18n="settings_title">إعدادات الـ API</div>
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p data-i18n="settings_intro">أدخل مفتاح API الخاص بك ونقطة النهاية. نوصي بـ Replicate (adirik/interior-design) أو Decor8 AI.</p>
+      <label style="font-size:11px;font-weight:700;color:var(--ink-mute);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:8px" data-i18n="settings_provider">مزود الخدمة</label>
+      <div class="select-wrap" style="margin-bottom:16px">
+        <select class="control" id="api-provider">
+          <option value="replicate">Replicate — adirik/interior-design</option>
+          <option value="decor8">Decor8 AI</option>
+          <option value="reimagine">REimagineHome</option>
+          <option value="stability">Stability AI (SDXL + ControlNet)</option>
+          <option value="custom">Custom Endpoint</option>
+        </select>
+      </div>
+      <label style="font-size:11px;font-weight:700;color:var(--ink-mute);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:8px" data-i18n="settings_key">API Key</label>
+      <input type="password" id="api-key" placeholder="sk-...">
+      <label style="font-size:11px;font-weight:700;color:var(--ink-mute);text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:8px" data-i18n="settings_endpoint">Endpoint URL</label>
+      <input type="text" id="api-endpoint" placeholder="https://api.replicate.com/v1/predictions">
+      <p style="font-size:12px;color:var(--ink-mute);margin-top:8px" data-i18n="settings_note">المفاتيح تُحفظ محلياً على جهازك فقط ولا تُرسل إلى أي خادم.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeModal()" data-i18n="btn_cancel">إلغاء</button>
+      <button class="btn-primary" onclick="saveSettings()" data-i18n="btn_save_settings">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════ STYLES DATA ═══════════════════
+const STYLES = [
+  { id: 'modern', ar: 'مودرن', en: 'Modern', bg: 'linear-gradient(135deg,#d4d1c8 0%,#8a8578 50%,#3a3833 100%)' },
+  { id: 'minimal', ar: 'بساطة', en: 'Minimal', bg: 'linear-gradient(135deg,#f5f2eb 0%,#d6d1c0 60%,#8a8578 100%)' },
+  { id: 'scandinavian', ar: 'إسكندنافي', en: 'Scandinavian', bg: 'linear-gradient(135deg,#e8ddc9 0%,#c4a882 60%,#6b5840 100%)' },
+  { id: 'industrial', ar: 'صناعي', en: 'Industrial', bg: 'linear-gradient(135deg,#6b5d52 0%,#3d3530 60%,#1a1714 100%)' },
+  { id: 'luxury', ar: 'فاخر', en: 'Luxury', bg: 'linear-gradient(135deg,#3a2820 0%,#6b4a2c 50%,#b8893a 100%)' },
+  { id: 'bohemian', ar: 'بوهيمي', en: 'Bohemian', bg: 'linear-gradient(135deg,#d4845c 0%,#a8552c 50%,#5a2a14 100%)' },
+  { id: 'japandi', ar: 'ياباندي', en: 'Japandi', bg: 'linear-gradient(135deg,#e4dac6 0%,#a8967a 50%,#4a3d2c 100%)' },
+  { id: 'midcentury', ar: 'منتصف القرن', en: 'Mid-Century', bg: 'linear-gradient(135deg,#c4885a 0%,#8a4a2c 50%,#3a1e10 100%)' },
+  { id: 'coastal', ar: 'ساحلي', en: 'Coastal', bg: 'linear-gradient(135deg,#d4e4ea 0%,#8ab4c4 50%,#2a5a6a 100%)' },
+  { id: 'moroccan', ar: 'مغربي', en: 'Moroccan', bg: 'linear-gradient(135deg,#d4a02c 0%,#a83a2c 50%,#2a1428 100%)' },
+  { id: 'farmhouse', ar: 'ريفي', en: 'Farmhouse', bg: 'linear-gradient(135deg,#f0e8d4 0%,#b89670 50%,#5a4528 100%)' },
+  { id: 'tropical', ar: 'استوائي', en: 'Tropical', bg: 'linear-gradient(135deg,#a8c878 0%,#4a8a4a 50%,#1a3a28 100%)' }
+];
+
+// ═══════════════════ i18n ═══════════════════
+const I18N = {
+  ar: {
+    brand: 'LAMSA AI', brand_tag: 'تصميم داخلي بالذكاء الاصطناعي',
+    nav_studio: 'الاستوديو', nav_gallery: 'الأعمال', nav_pricing: 'الأسعار', nav_help: 'المساعدة',
+    hero_badge: 'مدعوم بالذكاء الاصطناعي',
+    hero_title: 'حوّل غرفتك إلى <span class="italic">تحفة فنية</span> بلمسة واحدة',
+    hero_desc: 'ارفع صورة غرفتك، اختر النمط الذي تحبه، ودع الذكاء الاصطناعي يعيد تصميمها بنتائج احترافية في ثوانٍ. لا حاجة لمصمم داخلي ولا ميزانية ضخمة.',
+    stat_styles: 'نمط تصميم', stat_speed: 'زمن التوليد', stat_quality: 'جودة الإخراج',
+    label_before: 'قبل', label_after: 'بعد',
+    studio_title: 'استوديو التصميم',
+    studio_desc: 'ارفع صورة واضحة لغرفتك، اختر النمط، وخصّص التفاصيل لأفضل نتيجة ممكنة.',
+    upload_title: 'اسحب صورة غرفتك هنا', upload_sub: 'أو اضغط للاختيار من جهازك',
+    btn_change: 'تغيير', btn_remove: 'حذف',
+    tips_text: '<strong>نصيحة:</strong> التقط الصورة في وضح النهار من زاوية واسعة، وتأكد من ظهور الأرضية والجدران بوضوح. كلما كانت الصورة أوضح، كانت النتيجة أفضل.',
+    ctrl_room: 'نوع الغرفة', ctrl_style: 'نمط التصميم', ctrl_intensity: 'قوة التحويل',
+    intensity_low: 'محافظ', intensity_high: 'جريء',
+    ctrl_prompt: 'إضافات مخصصة (اختياري)',
+    prompt_placeholder: 'مثال: أضف نباتات، إضاءة دافئة، ألوان ترابية...',
+    btn_generate: 'توليد التصميم',
+    result_title: 'النتيجة',
+    btn_download: 'تحميل', btn_save: 'حفظ', btn_share: 'مشاركة',
+    loading_text: 'جاري إعادة التصميم...', loading_sub: 'عادةً ما يستغرق 15-30 ثانية',
+    analysis_palette: 'لوحة الألوان', analysis_notes: 'ملاحظات المصمم',
+    gallery_title: 'أعمالك المحفوظة',
+    gallery_desc: 'كل التصاميم التي أنشأتها محفوظة هنا. اضغط على أي منها لإعادة عرضها.',
+    gallery_empty_title: 'لا توجد تصاميم بعد', gallery_empty_desc: 'ابدأ بإنشاء أول تصميم لك من الاستوديو أعلاه.',
+    footer_tag: 'تصميم داخلي بالذكاء الاصطناعي',
+    footer_privacy: 'الخصوصية', footer_terms: 'الشروط', footer_contact: 'تواصل',
+    settings_title: 'إعدادات الـ API',
+    settings_intro: 'أدخل مفتاح API الخاص بك ونقطة النهاية. نوصي بـ Replicate (adirik/interior-design) أو Decor8 AI.',
+    settings_provider: 'مزود الخدمة', settings_key: 'مفتاح API', settings_endpoint: 'رابط النهاية',
+    settings_note: 'المفاتيح تُحفظ محلياً على جهازك فقط ولا تُرسل إلى أي خادم.',
+    btn_cancel: 'إلغاء', btn_save_settings: 'حفظ الإعدادات',
+    toast_saved: '✓ تم الحفظ', toast_no_image: 'الرجاء رفع صورة أولاً', toast_downloaded: '✓ تم التحميل',
+    toast_settings_saved: '✓ تم حفظ الإعدادات', toast_api_missing: 'الرجاء ضبط إعدادات الـ API',
+    gallery_saved: '✓ أُضيف إلى المعرض'
+  },
+  en: {
+    brand: 'LAMSA AI', brand_tag: 'AI Interior Design Studio',
+    nav_studio: 'Studio', nav_gallery: 'Gallery', nav_pricing: 'Pricing', nav_help: 'Help',
+    hero_badge: 'POWERED BY AI',
+    hero_title: 'Transform your room into a <span class="italic">masterpiece</span> in one tap',
+    hero_desc: 'Upload a photo of your room, pick a style you love, and let AI redesign it with professional results in seconds. No interior designer, no massive budget needed.',
+    stat_styles: 'Design Styles', stat_speed: 'Generation Time', stat_quality: 'Output Quality',
+    label_before: 'BEFORE', label_after: 'AFTER',
+    studio_title: 'Design Studio',
+    studio_desc: 'Upload a clear photo of your room, pick a style, and fine-tune the details for the best result.',
+    upload_title: 'Drop your room photo here', upload_sub: 'or click to browse',
+    btn_change: 'Change', btn_remove: 'Remove',
+    tips_text: '<strong>Tip:</strong> Shoot in daylight from a wide angle, and make sure the floor and walls are clearly visible. The clearer the photo, the better the result.',
+    ctrl_room: 'Room Type', ctrl_style: 'Design Style', ctrl_intensity: 'Transform Intensity',
+    intensity_low: 'Subtle', intensity_high: 'Bold',
+    ctrl_prompt: 'Custom Instructions (optional)',
+    prompt_placeholder: 'e.g., Add plants, warm lighting, earthy tones...',
+    btn_generate: 'Generate Design',
+    result_title: 'Result',
+    btn_download: 'Download', btn_save: 'Save', btn_share: 'Share',
+    loading_text: 'Redesigning your room...', loading_sub: 'Usually takes 15-30 seconds',
+    analysis_palette: 'Color Palette', analysis_notes: 'Designer Notes',
+    gallery_title: 'Your Saved Designs',
+    gallery_desc: 'All the designs you create are saved here. Click any to view again.',
+    gallery_empty_title: 'No designs yet', gallery_empty_desc: 'Create your first design from the studio above.',
+    footer_tag: 'AI Interior Design Studio',
+    footer_privacy: 'Privacy', footer_terms: 'Terms', footer_contact: 'Contact',
+    settings_title: 'API Settings',
+    settings_intro: 'Enter your API key and endpoint. We recommend Replicate (adirik/interior-design) or Decor8 AI.',
+    settings_provider: 'Provider', settings_key: 'API Key', settings_endpoint: 'Endpoint URL',
+    settings_note: 'Keys are stored locally on your device only and never sent to our servers.',
+    btn_cancel: 'Cancel', btn_save_settings: 'Save Settings',
+    toast_saved: '✓ Saved', toast_no_image: 'Please upload an image first', toast_downloaded: '✓ Downloaded',
+    toast_settings_saved: '✓ Settings saved', toast_api_missing: 'Please configure API settings',
+    gallery_saved: '✓ Added to gallery'
+  }
+};
+
+// ═══════════════════ STATE ═══════════════════
+let state = {
+  lang: 'ar',
+  theme: 'light',
+  uploadedImage: null,
+  selectedStyle: 'modern',
+  roomType: 'living',
+  intensity: 0.75,
+  customPrompt: '',
+  resultImage: null,
+  apiProvider: 'replicate',
+  apiKey: '',
+  apiEndpoint: ''
+};
+
+// ═══════════════════ INIT ═══════════════════
+function init() {
+  renderStyles();
+  setupEventListeners();
+  loadSettings();
+  loadGallery();
+  applyLang();
+  applyTheme();
+}
+
+function renderStyles() {
+  const grid = document.getElementById('style-grid');
+  grid.innerHTML = STYLES.map(s => `
+    <div class="style-card ${s.id === state.selectedStyle ? 'selected' : ''}" 
+         data-style="${s.id}" 
+         style="--style-bg: ${s.bg}">
+      <div class="style-name">${state.lang === 'ar' ? s.ar : s.en}</div>
+    </div>
+  `).join('');
+  grid.querySelectorAll('.style-card').forEach(card => {
+    card.addEventListener('click', () => {
+      state.selectedStyle = card.dataset.style;
+      grid.querySelectorAll('.style-card').forEach(c => c.classList.toggle('selected', c === card));
+    });
+  });
+}
+
+function setupEventListeners() {
+  // File upload
+  const fileInput = document.getElementById('file-input');
+  const uploadZone = document.getElementById('upload-zone');
+  fileInput.addEventListener('change', handleFileSelect);
+
+  ['dragover', 'dragenter'].forEach(e => {
+    uploadZone.addEventListener(e, ev => {
+      ev.preventDefault();
+      uploadZone.classList.add('dragging');
+    });
+  });
+  ['dragleave', 'dragend'].forEach(e => {
+    uploadZone.addEventListener(e, () => uploadZone.classList.remove('dragging'));
+  });
+  uploadZone.addEventListener('drop', ev => {
+    ev.preventDefault();
+    uploadZone.classList.remove('dragging');
+    if (ev.dataTransfer.files[0]) handleFile(ev.dataTransfer.files[0]);
+  });
+
+  // Room select
+  document.getElementById('room-select').addEventListener('change', e => state.roomType = e.target.value);
+
+  // Intensity
+  const intensitySlider = document.getElementById('intensity');
+  intensitySlider.addEventListener('input', e => {
+    state.intensity = parseFloat(e.target.value);
+    document.getElementById('intensity-val').textContent = state.intensity.toFixed(2);
+  });
+
+  // Prompt
+  document.getElementById('custom-prompt').addEventListener('input', e => state.customPrompt = e.target.value);
+
+  // Generate
+  document.getElementById('generate-btn').addEventListener('click', generate);
+
+  // Lang toggle
+  document.getElementById('lang-btn').addEventListener('click', toggleLang);
+
+  // Theme
+  document.getElementById('theme-btn').addEventListener('click', toggleTheme);
+
+  // Settings
+  document.getElementById('settings-btn').addEventListener('click', openSettings);
+
+  // Compare slider
+  setupCompareSlider();
+}
+
+function handleFileSelect(e) {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+}
+
+function handleFile(file) {
+  if (!file.type.startsWith('image/')) {
+    showToast(state.lang === 'ar' ? 'الرجاء اختيار صورة' : 'Please select an image', 'error');
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    showToast(state.lang === 'ar' ? 'الحجم أكبر من 10 ميجا' : 'File exceeds 10MB', 'error');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    state.uploadedImage = e.target.result;
+    const img = document.getElementById('uploaded-img');
+    img.src = state.uploadedImage;
+    img.style.display = 'block';
+    document.getElementById('upload-prompt').style.display = 'none';
+    document.getElementById('upload-zone').classList.add('has-image');
+    document.getElementById('generate-btn').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearImage() {
+  state.uploadedImage = null;
+  document.getElementById('uploaded-img').style.display = 'none';
+  document.getElementById('upload-prompt').style.display = 'block';
+  document.getElementById('upload-zone').classList.remove('has-image');
+  document.getElementById('generate-btn').disabled = true;
+  document.getElementById('file-input').value = '';
+}
+
+// ═══════════════════ GENERATE ═══════════════════
+async function generate() {
+  if (!state.uploadedImage) {
+    showToast(t('toast_no_image'), 'error');
+    return;
+  }
+
+  const resultSection = document.getElementById('result-section');
+  resultSection.classList.add('visible');
+  resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  document.getElementById('compare-before').src = state.uploadedImage;
+  document.getElementById('compare-after').src = state.uploadedImage;
+  document.getElementById('loading-overlay').classList.add('visible');
+  document.getElementById('loader-text').textContent = t('loading_text');
+
+  const style = STYLES.find(s => s.id === state.selectedStyle);
+  document.getElementById('result-style-badge').textContent = state.lang === 'ar' ? style.ar : style.en;
+
+  try {
+    // ═══════════════════════════════════════════════════════
+    // ★★★  نقطة الربط الرئيسية — أضف مفتاح API هنا  ★★★
+    // ★★★  MAIN INTEGRATION POINT — Add your API here  ★★★
+    // ═══════════════════════════════════════════════════════
+    const result = await generateDesign({
+      image: state.uploadedImage,
+      style: state.selectedStyle,
+      room: state.roomType,
+      intensity: state.intensity,
+      customPrompt: state.customPrompt
+    });
+
+    state.resultImage = result.image;
+    document.getElementById('compare-after').src = result.image;
+    renderAnalysis(result.analysis);
+  } catch (err) {
+    console.error(err);
+    // Fallback: demo result (remove when real API is connected)
+    await new Promise(r => setTimeout(r, 2000));
+    state.resultImage = state.uploadedImage; // placeholder
+    document.getElementById('compare-after').src = state.uploadedImage;
+    renderAnalysis(getDemoAnalysis());
+    showToast(state.lang === 'ar' ? '⚠ وضع العرض التجريبي — اضبط API في الإعدادات' : '⚠ Demo mode — configure API in settings', 'error');
+  } finally {
+    document.getElementById('loading-overlay').classList.remove('visible');
+  }
+}
+
+/**
+ * ╔═══════════════════════════════════════════════════════════════╗
+ * ║  ★  THE ONE FUNCTION YOU NEED TO EDIT  ★                     ║
+ * ║  Replace the body of this function with your real API call.  ║
+ * ║                                                                ║
+ * ║  Recommended APIs:                                             ║
+ * ║  1. Replicate: https://replicate.com/adirik/interior-design   ║
+ * ║  2. Decor8 AI: https://api.decor8.ai                          ║
+ * ║  3. Stability: https://api.stability.ai                       ║
+ * ╚═══════════════════════════════════════════════════════════════╝
+ */
+async function generateDesign({ image, style, room, intensity, customPrompt }) {
+  // Build the prompt
+  const styleObj = STYLES.find(s => s.id === style);
+  const prompt = `A ${styleObj.en} style ${room}, professional interior design photo, realistic, 8k, highly detailed${customPrompt ? ', ' + customPrompt : ''}`;
+
+  // ─────────── EXAMPLE: Replicate ───────────
+  // const response = await fetch('https://api.replicate.com/v1/predictions', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Authorization': `Token ${state.apiKey}`,
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify({
+  //     version: '76604baddc85b1b4616e1c6475eca080da339c8875bd4996705440484a6eac38',
+  //     input: {
+  //       image: image,
+  //       prompt: prompt,
+  //       prompt_strength: intensity,
+  //       num_inference_steps: 50
+  //     }
+  //   })
+  // });
+  // const data = await response.json();
+  // // poll data.urls.get until status === 'succeeded'
+  // return { image: data.output, analysis: await analyzeWithClaude(image, style) };
+
+  // ─────────── EXAMPLE: Decor8 AI ───────────
+  // const fd = new FormData();
+  // fd.append('input_image', await fetch(image).then(r => r.blob()));
+  // fd.append('design_style', style);
+  // fd.append('room_type', room);
+  // const response = await fetch('https://api.decor8.ai/generate_designs', {
+  //   method: 'POST',
+  //   headers: { 'Authorization': `Bearer ${state.apiKey}` },
+  //   body: fd
+  // });
+  // const data = await response.json();
+  // return { image: data.info.images[0].url, analysis: data.info.description };
+
+  // Throw to trigger demo fallback
+  throw new Error('API not configured');
+}
+
+function renderAnalysis(analysis) {
+  const palette = document.getElementById('palette');
+  palette.innerHTML = analysis.palette.map(c => `<div class="palette-chip" style="background:${c}"></div>`).join('');
+  document.getElementById('palette-desc').textContent = analysis.paletteDesc[state.lang];
+  document.getElementById('design-notes').textContent = analysis.notes[state.lang];
+}
+
+function getDemoAnalysis() {
+  const s = STYLES.find(s => s.id === state.selectedStyle);
+  const palettes = {
+    modern: ['#2d2d2d', '#d4d1c8', '#8a8578', '#b8893a', '#f5f2eb'],
+    minimal: ['#f5f2eb', '#d6d1c0', '#8a8578', '#3a3833', '#ffffff'],
+    scandinavian: ['#e8ddc9', '#c4a882', '#6b5840', '#f5f2eb', '#3a2820'],
+    industrial: ['#3d3530', '#6b5d52', '#b8893a', '#1a1714', '#8a7568'],
+    luxury: ['#3a2820', '#6b4a2c', '#b8893a', '#d4a02c', '#f5e8c8'],
+    bohemian: ['#d4845c', '#a8552c', '#5a2a14', '#c4a882', '#2a1428'],
+    japandi: ['#e4dac6', '#a8967a', '#4a3d2c', '#f5f2eb', '#2a1f14'],
+    midcentury: ['#c4885a', '#8a4a2c', '#3a1e10', '#d4a02c', '#2a1428'],
+    coastal: ['#d4e4ea', '#8ab4c4', '#2a5a6a', '#f5f8fa', '#1a3a4a'],
+    moroccan: ['#d4a02c', '#a83a2c', '#2a1428', '#6b2a14', '#c48a3a'],
+    farmhouse: ['#f0e8d4', '#b89670', '#5a4528', '#e4d4a8', '#2a1f14'],
+    tropical: ['#a8c878', '#4a8a4a', '#1a3a28', '#d4a02c', '#6b4528']
+  };
+  return {
+    palette: palettes[state.selectedStyle] || palettes.modern,
+    paletteDesc: {
+      ar: `لوحة ألوان ${s.ar} متناغمة تعكس الدفء والأناقة.`,
+      en: `A harmonious ${s.en.toLowerCase()} palette that reflects warmth and elegance.`
+    },
+    notes: {
+      ar: `تم تحويل الغرفة إلى نمط ${s.ar} مع التركيز على التوازن البصري، الإضاءة الدافئة، وتوزيع الأثاث بطريقة تعزز الراحة والوظيفية. ننصح بإضافة نباتات طبيعية لإحياء المساحة.`,
+      en: `The room has been transformed into a ${s.en} style with emphasis on visual balance, warm lighting, and functional furniture layout. We recommend adding natural plants to bring life to the space.`
+    }
+  };
+}
+
+// ═══════════════════ COMPARE SLIDER ═══════════════════
+function setupCompareSlider() {
+  const wrap = document.getElementById('compare-wrap');
+  const handle = document.getElementById('compare-handle');
+  const afterWrap = document.getElementById('compare-after-wrap');
+  let dragging = false;
+
+  const setPos = (x) => {
+    const rect = wrap.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(100, ((x - rect.left) / rect.width) * 100));
+    handle.style.left = pct + '%';
+    if (state.lang === 'ar') {
+      afterWrap.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+    } else {
+      afterWrap.style.clipPath = `inset(0 0 0 ${pct}%)`;
+    }
+  };
+
+  const onDown = e => {
+    dragging = true;
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    setPos(x);
+  };
+  const onMove = e => {
+    if (!dragging) return;
+    const x = e.touches ? e.touches[0].clientX : e.clientX;
+    setPos(x);
+  };
+  const onUp = () => dragging = false;
+
+  wrap.addEventListener('mousedown', onDown);
+  wrap.addEventListener('touchstart', onDown);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('touchmove', onMove);
+  window.addEventListener('mouseup', onUp);
+  window.addEventListener('touchend', onUp);
+}
+
+// ═══════════════════ ACTIONS ═══════════════════
+function downloadResult() {
+  if (!state.resultImage) return;
+  const a = document.createElement('a');
+  a.href = state.resultImage;
+  a.download = `mihrab-${state.selectedStyle}-${Date.now()}.png`;
+  a.click();
+  showToast(t('toast_downloaded'));
+}
+
+async function saveToGallery() {
+  if (!state.resultImage) return;
+  try {
+    const list = await getGallery();
+    const entry = {
+      id: Date.now(),
+      image: state.resultImage,
+      before: state.uploadedImage,
+      style: state.selectedStyle,
+      room: state.roomType,
+      date: new Date().toISOString()
+    };
+    list.unshift(entry);
+    await window.storage.set('gallery', JSON.stringify(list.slice(0, 50)));
+    loadGallery();
+    showToast(t('gallery_saved'));
+  } catch (err) { console.error(err); }
+}
+
+function shareResult() {
+  if (navigator.share && state.resultImage) {
+    navigator.share({ title: 'LAMSA AI AI Design', text: 'Check out my AI-designed room!', url: window.location.href });
+  } else {
+    showToast(state.lang === 'ar' ? 'انسخ الرابط لمشاركة التصميم' : 'Copy the link to share');
+  }
+}
+
+async function getGallery() {
+  try {
+    const r = await window.storage.get('gallery');
+    return r ? JSON.parse(r.value) : [];
+  } catch { return []; }
+}
+
+async function loadGallery() {
+  const list = await getGallery();
+  const grid = document.getElementById('gallery-grid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="gallery-empty">
+      <div class="gallery-empty-title">${t('gallery_empty_title')}</div>
+      <div>${t('gallery_empty_desc')}</div>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = list.map(item => {
+    const style = STYLES.find(s => s.id === item.style);
+    const date = new Date(item.date).toLocaleDateString(state.lang === 'ar' ? 'ar-SA' : 'en-US');
+    return `<div class="gallery-item" onclick="viewGalleryItem(${item.id})">
+      <img src="${item.image}" alt="">
+      <div class="gallery-meta">
+        <div class="gallery-style">${state.lang === 'ar' ? style.ar : style.en}</div>
+        <div class="gallery-date">${date}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function viewGalleryItem(id) {
+  const list = await getGallery();
+  const item = list.find(x => x.id === id);
+  if (!item) return;
+  state.resultImage = item.image;
+  state.uploadedImage = item.before;
+  state.selectedStyle = item.style;
+  document.getElementById('compare-before').src = item.before;
+  document.getElementById('compare-after').src = item.image;
+  const style = STYLES.find(s => s.id === item.style);
+  document.getElementById('result-style-badge').textContent = state.lang === 'ar' ? style.ar : style.en;
+  renderAnalysis(getDemoAnalysis());
+  document.getElementById('result-section').classList.add('visible');
+  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ═══════════════════ SETTINGS ═══════════════════
+function openSettings() {
+  document.getElementById('api-provider').value = state.apiProvider;
+  document.getElementById('api-key').value = state.apiKey;
+  document.getElementById('api-endpoint').value = state.apiEndpoint;
+  document.getElementById('settings-modal').classList.add('visible');
+}
+function closeModal() {
+  document.getElementById('settings-modal').classList.remove('visible');
+}
+async function saveSettings() {
+  state.apiProvider = document.getElementById('api-provider').value;
+  state.apiKey = document.getElementById('api-key').value;
+  state.apiEndpoint = document.getElementById('api-endpoint').value;
+  try {
+    await window.storage.set('settings', JSON.stringify({
+      provider: state.apiProvider,
+      key: state.apiKey,
+      endpoint: state.apiEndpoint
+    }));
+  } catch (err) {}
+  closeModal();
+  showToast(t('toast_settings_saved'));
+}
+async function loadSettings() {
+  try {
+    const r = await window.storage.get('settings');
+    if (r) {
+      const s = JSON.parse(r.value);
+      state.apiProvider = s.provider || 'replicate';
+      state.apiKey = s.key || '';
+      state.apiEndpoint = s.endpoint || '';
+    }
+  } catch (err) {}
+  try {
+    const r = await window.storage.get('prefs');
+    if (r) {
+      const p = JSON.parse(r.value);
+      state.lang = p.lang || 'ar';
+      state.theme = p.theme || 'light';
+    }
+  } catch (err) {}
+}
+async function savePrefs() {
+  try {
+    await window.storage.set('prefs', JSON.stringify({ lang: state.lang, theme: state.theme }));
+  } catch (err) {}
+}
+
+// ═══════════════════ LANG & THEME ═══════════════════
+function t(key) {
+  return I18N[state.lang][key] || key;
+}
+
+function toggleLang() {
+  state.lang = state.lang === 'ar' ? 'en' : 'ar';
+  applyLang();
+  savePrefs();
+}
+
+function applyLang() {
+  document.documentElement.lang = state.lang;
+  document.documentElement.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('lang-btn').textContent = state.lang === 'ar' ? 'EN' : 'ع';
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (I18N[state.lang][k]) el.textContent = I18N[state.lang][k];
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const k = el.dataset.i18nHtml;
+    if (I18N[state.lang][k]) el.innerHTML = I18N[state.lang][k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const k = el.dataset.i18nPh;
+    if (I18N[state.lang][k]) el.placeholder = I18N[state.lang][k];
+  });
+  renderStyles();
+  loadGallery();
+}
+
+function toggleTheme() {
+  state.theme = state.theme === 'light' ? 'dark' : 'light';
+  applyTheme();
+  savePrefs();
+}
+
+function applyTheme() {
+  document.documentElement.dataset.theme = state.theme;
+  const icon = document.getElementById('theme-icon');
+  if (state.theme === 'dark') {
+    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  } else {
+    icon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>';
+  }
+}
+
+// ═══════════════════ UI HELPERS ═══════════════════
+function showToast(msg, type = '') {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast visible' + (type ? ' ' + type : '');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toast.classList.remove('visible'), 3000);
+}
+
+init();
+</script>
+</body>
+</html>
